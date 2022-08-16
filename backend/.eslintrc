@@ -5,6 +5,7 @@
     "eqeqeq": "off",
     "no-unused-vars": "off",
     "linebreak-style":"off",
-    "no-useless-escape":"off"
+    "no-useless-escape":"off",
+    "consistent-return": "off"
   }
 }
