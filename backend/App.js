@@ -17,6 +17,9 @@ app.use(requestLoggder);
 const allowedCors = [
   'http://project.mesto.nomoredomains.sbs',
   'https://project.mesto.nomoredomains.sbs',
+  'http://api.mesto.andreym.nomoredomains.sbs',
+  'https://api.mesto.andreym.nomoredomains.sbs',
+  'http://localhost:3000',
 ];
 app.use((req, res, next) => {
   const { origin } = req.headers;
