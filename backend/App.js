@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+const cors = require('cors');
+const corsOptions = require('./utils/corsOptions');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { requestLoggder, errorLogger } = require('./middlewares/logger');
@@ -14,32 +16,7 @@ const { PORT = 3000 } = process.env;
 
 app.use(requestLoggder);
 
-const allowedCors = [
-  'http://project.mesto.nomoredomains.sbs',
-  'https://project.mesto.nomoredomains.sbs',
-  'http://api.mesto.andreym.nomoredomains.sbs',
-  'https://api.mesto.andreym.nomoredomains.sbs',
-  'http://localhost:3000',
-];
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  const { method } = req;
-  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-  const requestHeaders = req.headers['access-control-request-headers'];
-
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', true);
-  }
-
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    res.header('Access-Control-Allow-Credentials', true);
-    return res.end();
-  }
-  next();
-});
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
