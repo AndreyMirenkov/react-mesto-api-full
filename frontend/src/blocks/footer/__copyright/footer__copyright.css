@@ -1,0 +1,23 @@
+.footer__copyright{
+    width: 282px;
+    margin: 0 auto;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #545454;    
+}
+@media screen and (min-width: 584px) {
+    .footer__copyright{
+        padding-right: 302px;
+    }
+}
+@media screen and (min-width: 890px) {
+    .footer__copyright{
+        width: 318px;
+        font-size: 18px;
+        line-height: 22px;
+        padding-right: 562px;
+    }
+}

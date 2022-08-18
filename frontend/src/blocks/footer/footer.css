@@ -1,0 +1,10 @@
+.footer{
+    padding-top: 48px;
+    padding-bottom: 36px;
+}
+@media screen and (min-width: 890px) {
+    .footer{
+        padding-top: 66px;
+        padding-bottom: 60px;
+    }
+}

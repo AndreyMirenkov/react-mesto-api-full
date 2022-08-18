@@ -1,0 +1,14 @@
+.auth__content{
+    width: 260px;
+}
+.auth__content:last-child{
+    padding-bottom: 40px;
+}
+@media screen and (min-width: 890px) {
+    .auth__content{
+        width: 358px;
+    }
+    .auth__content:last-child{
+        padding-bottom: 80px;
+    }
+}
