@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-error');
 const DeleteError = require('../errors/delete-error');
+const CastError = require('../errors/cast-error');
 
 module.exports.getCard = (req, res, next) => {
   Card.find({}).then((cards) => res.send({ data: cards }))
@@ -18,14 +19,21 @@ module.exports.deleteCard = (req, res, next) => {
       throw new NotFoundError('Запрашиваемая карточка не найдена');
     }
     if (card.owner == req.user._id) {
-      Card.findByIdAndRemove(card._id).then(() => {
-        res.status(200).send({ message: 'Картинка удалена' });
-      });
+      Card.findByIdAndRemove(card._id)
+        .orFail(new NotFoundError('Запрашиваемая карточка не найдена'))
+        .then(() => {
+          res.status(200).send({ message: 'Картинка удалена' });
+        });
     } else {
       throw new DeleteError('Вы не можете удалить чужую карточку');
     }
   })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Переданы некорректные данные в запрос удаления карточки'));
+      }
+      return next(err);
+    });
 };
 module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
@@ -38,7 +46,12 @@ module.exports.likeCard = (req, res, next) => {
     }
     res.status(200).send({ message: card });
   })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Переданы некорректные данные в запрос постановки лайка'));
+      }
+      return next(err);
+    });
 };
 module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
@@ -51,5 +64,10 @@ module.exports.dislikeCard = (req, res, next) => {
     }
     res.status(200).send({ message: card });
   })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Переданы некорректные данные в запрос снятия лайка'));
+      }
+      return next(err);
+    });
 };

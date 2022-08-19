@@ -8,6 +8,7 @@ const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { requestLoggder, errorLogger } = require('./middlewares/logger');
 const regex = require('./helpers/regex');
+const NotFoundError = require('./errors/not-found-error');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -74,8 +75,8 @@ app.use(auth);
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
-app.use('/*', (req, res) => {
-  res.status(404).send({ message: 'Not found' });
+app.use('/*', () => {
+  throw new NotFoundError('Not found');
 });
 
 app.use(errorLogger);

@@ -5,6 +5,7 @@ const User = require('../models/user');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFoundError = require('../errors/not-found-error');
 const UniqueEmailError = require('../errors/unigue-email-error');
+const CastError = require('../errors/cast-error');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({}).then((users) => res.send({ data: users }))
@@ -17,7 +18,12 @@ module.exports.getUser = (req, res, next) => {
     }
     res.send({ data: user });
   })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Переданы некорректные данные в запрос поиска пользователя'));
+      }
+      return next(err);
+    });
 };
 module.exports.createUser = (req, res, next) => {
   const {
@@ -35,8 +41,14 @@ module.exports.createUser = (req, res, next) => {
         email: user.email,
       },
     }))
-    .catch(() => {
-      next(new UniqueEmailError('Этот Email уже используется'));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new CastError('Переданы некорректные данные при создании пользователя.'));
+      }
+      if (err.code === 11000) {
+        return next(new UniqueEmailError('Этот Email уже используется'));
+      }
+      return next(err);
     });
 };
 module.exports.patchProfile = (req, res, next) => {
