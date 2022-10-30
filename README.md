@@ -8,8 +8,7 @@
  * ❤ _Возможность оценки карточки_ 😍
 
 ## Стек технологий ##
-
-![HTML](https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original-wordmark.svg)
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original-wordmark.svg" alt = 'HTML' width: 40px height: 40px/>
 ![CSS]()
 ![Node.js]()
 ![React.js]()
